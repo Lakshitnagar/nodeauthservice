@@ -18,7 +18,7 @@ router.post('/', validateRegisterReq, (req, res) => {
 
     User.findOne({ email: email }).then(user => {
         if (user) {
-            res.send({
+            res.status(400).send({
                 error: 'invalid inputs',
                 msg: 'user aleary exists'
             });
@@ -38,8 +38,8 @@ router.post('/', validateRegisterReq, (req, res) => {
                         .then(user => {
                             let token = jwtService.generateToken({email});
 
-                            res.cookie('Authorization', token, {httpOnly:true});
-                            res.send({'authToken':'success'});
+                            res.cookie('jwt', token, {httpOnly:true});
+                            res.status(201).send({'authToken':'success'});
                         })
                         .catch(err => console.log(err));
                 });

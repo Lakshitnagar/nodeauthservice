@@ -15,10 +15,9 @@ module.exports = {
 
     validateRegisterReq: function (req, res, next) {
         const { email, password, confirmPassword } = req.body;
-        console.log('req', req.body);
 
         if (!email || !password || !confirmPassword) {
-            res.send({
+            res.status(400).send({
                 error: 'invalid inputs',
                 msg: 'Please send all fields'
             });
@@ -30,7 +29,7 @@ module.exports = {
         //ToDo: password pattern verification helper
 
         if (password != confirmPassword) {
-            res.send({
+            res.status(400).send({
                 error: 'invalid inputs',
                 msg: 'Password do not match'
             });
@@ -39,7 +38,7 @@ module.exports = {
         }
 
         if (password && password.length < 6) {
-            res.send({
+            res.status(400).send({
                 error: 'invalid inputs',
                 msg: 'Password must be at least 6 characters'
             });
