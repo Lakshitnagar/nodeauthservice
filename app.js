@@ -6,8 +6,13 @@ var logger = require('morgan');
 
 var indexRouter = require('./routes/index');
 var usersRouter = require('./routes/users');
+var registerRouter = require('./routes/v1/auth/register');
+
+var jwt = require('./jwt/jwtService');
 
 var app = express();
+
+var db = require("./mongodb/connection");
 
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));
@@ -19,8 +24,38 @@ app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 
+//cross origin headers
+// Add headers
+app.use(function(req, res, next) {
+  // Website you wish to allow to connect
+  res.setHeader(
+    "Access-Control-Allow-Origin",
+    "development" === "development" ? "http://localhost:4000" : "https://yoloapp-client.herokuapp.com"
+  );
+
+  // Request methods you wish to allow
+  res.setHeader(
+    "Access-Control-Allow-Methods",
+    "GET, POST, OPTION, PUT, PATCH, DELETE"
+  );
+
+  // Request headers you wish to allow
+  res.setHeader(
+    "Access-Control-Allow-Headers",
+    "X-Requested-With,content-type"
+  );
+
+  // Set to true if you need the website to include cookies in the requests sent
+  // to the API (e.g. in case you use sessions)
+  res.setHeader("Access-Control-Allow-Credentials", true);
+
+  // Pass to next layer of middleware
+  next();
+});
+
 app.use('/', indexRouter);
 app.use('/users', usersRouter);
+app.use('/v1/auth/register', registerRouter);
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
