@@ -4,9 +4,9 @@ const jwt  = require('jsonwebtoken');
 // PRIVATE and PUBLIC key
 var privateKEY = fs.readFileSync('./jwt/secrets/private.key', 'utf8');
 var publicKEY = fs.readFileSync('./jwt/secrets/public.key', 'utf8');
-var i = 'Mysoft corp';          // Issuer 
+var i = 'oloyAuth';          // Issuer 
 var s = 'some@user.com';        // Subject 
-var a = 'http://mysoftcorp.in'; // Audience
+var a = 'http://oloy.com'; // Audience
 
 // SIGNING OPTIONS
 var signOptions = {

@@ -4,7 +4,7 @@ var router = express.Router();
 const bcrypt = require('bcryptjs');
 
 // Load User model
-const User = require('../../../models/User');
+const User = require('../../../mongodb/models/userModel');
 
 // jwt service
 const jwtService = require('../../../jwt/jwtService');
@@ -23,10 +23,11 @@ router.post('/', validateLoginReq, (req, res) => {
                 msg: 'no user exists'
             });
         } else {
+            console.log('user', user);
             bcrypt.compare(password, user.password, (err, isMatch) => {
                 if (err) throw err;
                 if (isMatch) {
-                    let token = jwtService.generateToken({ email });
+                    let token = jwtService.generateToken({ uuid:user.uuid });
 
                     res.cookie('jwt', token, { httpOnly: true });
                     res.status(200).send({ 'authToken': 'success' });
