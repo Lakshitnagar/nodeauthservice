@@ -27,7 +27,15 @@ router.post('/', validateLoginReq, (req, res) => {
             bcrypt.compare(password, user.password, (err, isMatch) => {
                 if (err) throw err;
                 if (isMatch) {
-                    jwtService.generateToken({ uuid:user.uuid }).then((token) => {
+                    if (!user.refreshToken) {
+                        res.status(401).send({
+                            error: 'unauthorized',
+                            msg: 'account suspended'
+                        });
+
+                        return;
+                    }
+                    jwtService.generateToken({ uuid: user.uuid }).then((token) => {
                         res.cookie('jwt', token, { httpOnly: true });
                         res.cookie('refreshToken', user.refreshToken, { httpOnly: true });
                         res.status(200).send({ 'authToken': 'success' });

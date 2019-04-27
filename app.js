@@ -8,6 +8,7 @@ var indexRouter = require('./routes/index');
 var usersRouter = require('./routes/users');
 var registerRouter = require('./routes/v1/auth/register');
 var loginRouter = require('./routes/v1/auth/login');
+var logoutRouter = require('./routes/v1/auth/logout');
 var userInfoRouter = require('./routes/v1/user/info');
 
 var app = express();
@@ -26,7 +27,7 @@ app.use(express.static(path.join(__dirname, 'public')));
 
 //cross origin headers
 // Add headers
-app.use(function(req, res, next) {
+app.use(function (req, res, next) {
   // Website you wish to allow to connect
   res.setHeader(
     "Access-Control-Allow-Origin",
@@ -54,7 +55,7 @@ app.use(function(req, res, next) {
 });
 
 // Check JWT
-app.use(function(req, res, next) {
+app.use(function (req, res, next) {
   console.log('req.cookies', req.cookies);
 
   // Pass to next layer of middleware
@@ -65,15 +66,16 @@ app.use('/', indexRouter);
 app.use('/users', usersRouter);
 app.use('/v1/auth/register', registerRouter);
 app.use('/v1/auth/login', loginRouter);
+app.use('/v1/auth/logout', logoutRouter);
 app.use('/v1/user/info', userInfoRouter);
 
 // catch 404 and forward to error handler
-app.use(function(req, res, next) {
+app.use(function (req, res, next) {
   next(createError(404));
 });
 
 // error handler
-app.use(function(err, req, res, next) {
+app.use(function (err, req, res, next) {
   // set locals, only providing error in development
   res.locals.message = err.message;
   res.locals.error = req.app.get('env') === 'development' ? err : {};

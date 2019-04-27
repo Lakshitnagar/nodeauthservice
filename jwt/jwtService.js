@@ -7,7 +7,7 @@ var publicKEY = fs.readFileSync('./jwt/secrets/public.key', 'utf8');
 var i = 'oloyAuth';          // Issuer 
 var s = 'some@user.com';        // Subject 
 var a = 'http://oloy.com'; // Audience
-var t = 10; // Expire time
+var t = 300; // Expire time
 
 // SIGNING OPTIONS
 var signOptions = {
