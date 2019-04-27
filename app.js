@@ -8,8 +8,7 @@ var indexRouter = require('./routes/index');
 var usersRouter = require('./routes/users');
 var registerRouter = require('./routes/v1/auth/register');
 var loginRouter = require('./routes/v1/auth/login');
-
-var jwt = require('./jwt/jwtService');
+var userInfoRouter = require('./routes/v1/user/info');
 
 var app = express();
 
@@ -54,10 +53,19 @@ app.use(function(req, res, next) {
   next();
 });
 
+// Check JWT
+app.use(function(req, res, next) {
+  console.log('req.cookies', req.cookies);
+
+  // Pass to next layer of middleware
+  next();
+});
+
 app.use('/', indexRouter);
 app.use('/users', usersRouter);
 app.use('/v1/auth/register', registerRouter);
 app.use('/v1/auth/login', loginRouter);
+app.use('/v1/user/info', userInfoRouter);
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {

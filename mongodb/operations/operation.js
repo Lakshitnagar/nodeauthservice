@@ -7,7 +7,7 @@ var timeModel = require('../models/timeModel');
 var ErrorModel = require('../../models/error.model');
 
 module.exports = {
-    findUserByUuid: findUserByUuid,
+    findUserByRefreshToken: findUserByRefreshToken,
     findUserByUuidAndSessionId: findUserByUuidAndSessionId,
     addNewUser: addNewUser,
     addNewSessionByUuid: addNewSessionByUuid,
@@ -15,11 +15,11 @@ module.exports = {
 };
 
 // checking
-function findUserByUuid(uuid) {
+function findUserByRefreshToken(refreshToken) {
     return new Promise((resolve, reject) => {
-        if (!uuid) resolve(null);
+        if (!refreshToken) resolve(null);
 
-        userModel.findOne({ uuid: uuid }, function (err, user) {
+        userModel.findOne({ refreshToken: refreshToken }, function (err, user) {
             if (err) {
                 console.log('error on main operation' + err);
                 let dbError = new ErrorModel({

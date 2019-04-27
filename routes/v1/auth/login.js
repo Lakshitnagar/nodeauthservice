@@ -27,10 +27,16 @@ router.post('/', validateLoginReq, (req, res) => {
             bcrypt.compare(password, user.password, (err, isMatch) => {
                 if (err) throw err;
                 if (isMatch) {
-                    let token = jwtService.generateToken({ uuid:user.uuid });
-
-                    res.cookie('jwt', token, { httpOnly: true });
-                    res.status(200).send({ 'authToken': 'success' });
+                    jwtService.generateToken({ uuid:user.uuid }).then((token) => {
+                        res.cookie('jwt', token, { httpOnly: true });
+                        res.cookie('refreshToken', user.refreshToken, { httpOnly: true });
+                        res.status(200).send({ 'authToken': 'success' });
+                    }).catch((err) => {
+                        res.status(500).send({
+                            error: 'token generation',
+                            msg: 'error while generating token'
+                        });
+                    });
                 } else {
                     rres.status(400).send({
                         error: 'invalid inputs',

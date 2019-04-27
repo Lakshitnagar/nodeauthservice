@@ -25,11 +25,13 @@ router.post('/', validateRegisterReq, (req, res) => {
             });
         } else {
             console.log('user');
-            const uuid = uuidService.generateUuid();
+            const uuid = uuidService.generateTimeUuid();
+            const refreshToken = uuidService.generateRandomUuid();
             const newUser = new User({
                 email,
                 password,
-                uuid
+                uuid,
+                refreshToken
             });
 
             bcrypt.genSalt(10, (err, salt) => {
@@ -39,14 +41,17 @@ router.post('/', validateRegisterReq, (req, res) => {
                     newUser
                         .save()
                         .then(user => {
-                            let token = jwtService.generateToken({uuid});
-                            // console.log('token', token);
-                            
-                            // let data = jwtService.verifyToken(token);
-                            // console.log('data', data);
+                            jwtService.generateToken({ uuid }).then((token) => {
+                                res.cookie('jwt', token, { httpOnly: true });
+                                res.cookie('refreshToken', refreshToken, { httpOnly: true });
+                                res.status(201).send({ 'user': user });
+                            }).catch((err) => {
+                                res.status(500).send({
+                                    error: 'token generation',
+                                    msg: 'error while generating token'
+                                });
+                            });
 
-                            res.cookie('jwt', token, {httpOnly:true});
-                            res.status(201).send({'authToken':'success'});
                         })
                         .catch(err => console.log(err));
                 });
