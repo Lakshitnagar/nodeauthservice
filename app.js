@@ -8,6 +8,7 @@ var indexRouter = require('./routes/index');
 var usersRouter = require('./routes/users');
 var registerRouter = require('./routes/v1/auth/register');
 var loginRouter = require('./routes/v1/auth/login');
+var loggedInRouter = require('./routes/v1/auth/loggedIn');
 var logoutRouter = require('./routes/v1/auth/logout');
 var userInfoRouter = require('./routes/v1/user/info');
 
@@ -66,6 +67,7 @@ app.use('/', indexRouter);
 app.use('/users', usersRouter);
 app.use('/v1/auth/register', registerRouter);
 app.use('/v1/auth/login', loginRouter);
+app.use('/v1/auth/loggedIn', loggedInRouter);
 app.use('/v1/auth/logout', logoutRouter);
 app.use('/v1/user/info', userInfoRouter);
 

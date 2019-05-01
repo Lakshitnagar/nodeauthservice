@@ -1,5 +1,6 @@
 var express = require('express');
 var router = express.Router();
+const ResponseModel = require('../../../models/response.model');
 
 const bcrypt = require('bcryptjs');
 
@@ -38,7 +39,15 @@ router.post('/', validateLoginReq, (req, res) => {
                     jwtService.generateToken({ uuid: user.uuid }).then((token) => {
                         res.cookie('jwt', token, { httpOnly: true });
                         res.cookie('refreshToken', user.refreshToken, { httpOnly: true });
-                        res.status(200).send({ 'authToken': 'success' });
+                        const loginSuccess = new ResponseModel({
+                            code: 200,
+                            type: 'success',
+                            message: 'login successful',
+                            data: {
+                                isAuth: true
+                            }
+                        });
+                        res.status(loginSuccess.code).send(loginSuccess);
                     }).catch((err) => {
                         res.status(500).send({
                             error: 'token generation',
@@ -46,7 +55,7 @@ router.post('/', validateLoginReq, (req, res) => {
                         });
                     });
                 } else {
-                    rres.status(400).send({
+                    res.status(400).send({
                         error: 'invalid inputs',
                         msg: 'incorrect password'
                     });

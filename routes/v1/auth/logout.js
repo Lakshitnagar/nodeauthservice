@@ -1,18 +1,7 @@
 var express = require('express');
 var router = express.Router();
 
-const bcrypt = require('bcryptjs');
-
-// Load User model
-const User = require('../../../mongodb/models/userModel');
-
-// jwt service
-const jwtService = require('../../../jwt/jwtService');
-
-// Load middlewares
-const { validateLoginReq } = require('../../../middlewares/_login');
-
-// Login
+// Logout
 router.get('/', (req, res) => {
     res.cookie('jwt', '', { httpOnly: true });
     res.cookie('refreshToken', '', { httpOnly: true });
