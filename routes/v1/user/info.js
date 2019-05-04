@@ -5,6 +5,7 @@ const bcrypt = require('bcryptjs');
 
 // Load User model
 const User = require('../../../mongodb/models/userModel');
+const ResponseModel = require('../../../models/response.model');
 
 // jwt service
 const jwtService = require('../../../jwt/jwtService');
@@ -23,7 +24,15 @@ router.get('/', authenticate, (req, res) => {
                 msg: 'no user exists'
             });
         } else {
-            res.status(200).send({email});
+            const infoSuccess = new ResponseModel({
+                code: 200,
+                type: 'success',
+                message: 'info fetched successfully',
+                data: {
+                    user: email
+                }
+            });
+            res.status(infoSuccess.code).send(infoSuccess);
         }
     });
 });

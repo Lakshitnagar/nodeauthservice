@@ -24,7 +24,6 @@ router.post('/', validateLoginReq, (req, res) => {
                 msg: 'no user exists'
             });
         } else {
-            console.log('user', user);
             bcrypt.compare(password, user.password, (err, isMatch) => {
                 if (err) throw err;
                 if (isMatch) {
